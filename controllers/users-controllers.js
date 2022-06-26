@@ -2,7 +2,7 @@ const { User } = require('../Models');
 
 const userController = {
     // get all users
-    getAllUser(req, res) {
+    getAllUsers(req, res) {
       User.find()
         .populate({
           path: "friends",
@@ -43,8 +43,8 @@ const userController = {
         });
     },
   
-    // create user
-    createUser({ body }, res) {
+    
+    addUser({ body }, res) {
       User.create(body)
         .then((dbUserData) => res.json(dbUserData))
         .catch((err) => res.json(err));
@@ -73,8 +73,6 @@ const userController = {
           if (!dbUserData) {
             return res.status(404).json({ message: "No user" });
           }
-          // BONUS: get ids of user's `thoughts` and delete them all
-          // $in to find specific things
           return Thought.deleteMany({ _id: { $in: dbUserData.thoughts } });
         })
         .then(() => {
@@ -83,7 +81,6 @@ const userController = {
         .catch((err) => res.json(err));
     },
   
-    // add friend
     addFriend({ params }, res) {
       User.findOneAndUpdate(
         { _id: params.userId },
@@ -100,8 +97,7 @@ const userController = {
         .catch((err) => res.json(err));
     },
   
-    // delete friend
-    removeFriend({ params }, res) {
+    deleteFriend({ params }, res) {
       User.findOneAndUpdate(
         { _id: params.userId },
         { $pull: { friends: params.friendId } },

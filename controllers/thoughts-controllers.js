@@ -27,7 +27,6 @@ const ThoughtController = {
         res.status(400).json(err);
       });
     },
-    // add thought to User
     addThought({ params, body }, res) {
         console.log("INCOMING BODY", body)
         Thought.create(body)
@@ -62,8 +61,8 @@ const ThoughtController = {
           .catch((err) => res.status(400).json(err));
       },
 
-    // remove thought
-    removeThought({ params }, res) {
+   
+    deleteThought({ params }, res) {
         Thought.findOneAndDelete({ _id: params.thoughtId })
             .then(deletedthought => {
                 if (!deletedthought) {
@@ -96,8 +95,8 @@ const ThoughtController = {
             })
             .catch(err => res.json(err));
     },
-    // remove reaction
-    removeReaction({ params }, res) {
+    
+    deleteReaction({ params }, res) {
         Thought.findOneAndUpdate(
             { _id: params.thoughtId },
             { $pull: { reactions: { reactionId: params.reactionId } } },
